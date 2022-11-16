@@ -1,21 +1,31 @@
 package com.example.userlogin;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.navigation.NavigationView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     TextView TV_signup;
     EditText emailaddress, password;
     Button button;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    DrawerLayout drawerlayout;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +35,18 @@ public class MainActivity extends AppCompatActivity {
         emailaddress = findViewById(R.id.emailaddress);
         password = findViewById(R.id.password);
         button = findViewById(R.id.button);
+        drawerlayout = findViewById(R.id.drawerlayout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerlayout, R.string.nav_open, R.string.nav_close);
+
+        drawerlayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         TV_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +84,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void storeUserInfo() {
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("UserReg", MODE_PRIVATE);
@@ -73,5 +106,27 @@ public class MainActivity extends AppCompatActivity {
         editor.commit();
     }
 
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+
+        switch (menuItem.getItemId()) {
+            case R.id.profile:
+                Intent intent = new Intent(MainActivity.this, userprofile.class);
+                startActivity(intent);
+
+                break;
+            case R.id.register:
+                Toast.makeText(this, "Register Click", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+
+
+        drawerlayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
 }
 

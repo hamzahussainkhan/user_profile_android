@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">User login</string>
     <string name="signup"><u>sign up</u></string>
+
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>
